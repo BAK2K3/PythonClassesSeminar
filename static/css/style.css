@@ -1,0 +1,21 @@
+h1 {
+    color: red;
+}
+
+body {
+    height: 100%;
+}
+
+.img-fluid {
+    width: 100%;
+}
+
+hr {
+    width: 30%;
+    margin: auto;
+    height: 3px !important;
+}
+
+.btn.btn-primary {
+    margin:auto;
+}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+    <div class="container-fluid d-flex justify-content-center text-center">
+        
+        
+        <form method="POST" action="{{url_for('add_book')}}">
+            <div class="mb-3">
+              <label for="title" class="form-label">Book Title</label>
+              <input type="text" class="form-control" id="title" name="title">
+            </div>
+
+            <div class="mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" class="form-control" id="author" name="author">
+            </div>
+
+            <div class="mb-3">
+                <label for="date" class="form-label">Release Date</label>
+                <input type="date" class="form-control" id="date" name="date">
+            </div>
+
+            <div class="mb-3">
+                <label for="urlInput" class="form-label">Image URL</label>
+                <input type="text" class="form-control" id="urlInput" name="urlInput">
+            </div>
+
+
+            <div class="mb-3">
+                <label for="firstRating" class="form-label">Initial Rating</label>
+                <input type="number" class="form-control" id="firstRating" name="firstRating">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+
+
+
+
+
+{% endblock %}
+

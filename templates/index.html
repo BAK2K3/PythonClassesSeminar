@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for book in books %}
+
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="row mb-3 mt-3">
+            <div class="col-3">
+                <img src="{{ book.Image_URL }}" class="img-fluid" alt="{{ book.Title }}">
+            </div>
+
+            <div class="col-9">
+                <p><strong>Title: </strong>{{ book.Title }}</p>
+                <p><strong>Author: </strong>{{ book.Author }}
+                <p><strong>Release: </strong>{{ book.Release }}
+                <p><strong>Avg. Rating: </strong>{{ book.Ratings }}
+            </div>
+
+        </div>
+    </div>
+    <hr>
+
+
+{% endfor %}
+
+
+{% endblock %}
+
