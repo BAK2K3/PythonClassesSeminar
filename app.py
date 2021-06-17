@@ -2,7 +2,7 @@
 import os
 from flask import Flask, render_template, request
 from flask.helpers import url_for
-from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo, ObjectId
 from werkzeug.utils import redirect
 
 
@@ -32,7 +32,20 @@ def add_book():
 
     # POST Method
     if request.method == "POST":
-        print(request.form)
+
+        new_book = {
+            "Title": request.form.get('title'),
+            "Author": request.form.get('author'),
+            "Release": request.form.get('date'),
+            "Image_URL": request.form.get('urlInput'),
+            "Ratings": [int(request.form.get('firstRating'))]
+        }
+
+        try:
+            mongo.db.Books.insert_one(new_book)
+        except Exception as e:
+            print(e)
+        
         return redirect(url_for("index"))
 
     # GET Method
@@ -43,13 +56,20 @@ def add_book():
 @app.route("/delete_book/<book_id>")
 def delete_book(book_id):
 
+    mongo.db.Books.delete_one({"_id": ObjectId(book_id)})
+
     # GET Method
     return redirect(url_for("index"))
 
 
-# Flask Route for viewing book
-@app.route("/view_book/<book_id>")
-def view_book(book_id):
+# Flask Route for Adding Rating
+@app.route("/rate_book/<book_id>", methods=["GET", "POST"])
+def rate_book(book_id):
+
+    book = mongo.db.Books.find_one({"_id": ObjectId(book_id)})
+    book['Ratings'].append(int(request.form.get("addRating")))
+    mongo.db.Books.update_one({"_id": ObjectId(book_id)},
+                              {"$set": book})
 
     # GET Method
     return redirect(url_for("index"))

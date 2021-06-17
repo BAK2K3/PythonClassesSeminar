@@ -11,9 +11,18 @@
 
             <div class="col-9">
                 <p><strong>Title: </strong>{{ book.Title }}</p>
-                <p><strong>Author: </strong>{{ book.Author }}
-                <p><strong>Release: </strong>{{ book.Release }}
-                <p><strong>Avg. Rating: </strong>{{ book.Ratings }}
+                <p><strong>Author: </strong>{{ book.Author }}</p>
+                <p><strong>Release: </strong>{{ book.Release }}</p>
+                <p><strong>Avg. Rating: </strong>{{ book.Ratings }}</p>
+                <form method="POST" action="{{ url_for('rate_book', book_id=book._id) }}">
+                    <div class="mb-3">
+                        <label for="addRating" class="form-label">Rating</label>
+                        <input type="number" class="" id="addRating" name="addRating">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Rate</button>
+                    <a href="{{ url_for('delete_book', book_id=book._id) }}" class="btn btn-danger">Delete</a>
+                </form>
+                
             </div>
 
         </div>
