@@ -2,8 +2,7 @@
 import os
 from flask import Flask, render_template, request, redirect
 from flask.helpers import url_for
-from flask_pymongo import PyMongo, ObjectId
-
+from flask_pymongo import PyMongo
 
 # Initialise Flask App
 app = Flask(__name__)
@@ -18,17 +17,16 @@ mongo = PyMongo()
 mongo.init_app(app)
 
 
+# Do not recommend this for production
+from example_functions import (insert_one_book, delete_one_book,
+                               calculate_average, add_book_rating,
+                               obtain_all_books)
+
+
 # Flask Route for home
 @app.route("/")
 def index():
-
-    # books = mongo.db.Books.find()
-
-    books = list(mongo.db.Books.find())
-
-    for i in range(len(books)):
-        books[i]['ratings'] = round(sum(books[i]['ratings']) / len(books[i]['ratings']), 2)
-
+    books = calculate_average(obtain_all_books())
     return render_template("index.html", books=books)
 
 
@@ -38,20 +36,7 @@ def add_book():
 
     # POST Method
     if request.method == "POST":
-
-        new_book = {
-            "title": request.form.get('title'),
-            "author": request.form.get('author'),
-            "release": request.form.get('date'),
-            "image_URL": request.form.get('urlInput'),
-            "ratings": [int(request.form.get('firstRating'))]
-        }
-
-        try:
-            mongo.db.Books.insert_one(new_book)
-        except Exception as e:
-            print(e)
-
+        insert_one_book(request.form)
         return redirect(url_for("index"))
 
     # GET Method
@@ -62,7 +47,7 @@ def add_book():
 @app.route("/delete_book/<book_id>")
 def delete_book(book_id):
 
-    mongo.db.Books.delete_one({"_id": ObjectId(book_id)})
+    delete_one_book(book_id)
 
     # GET Method
     return redirect(url_for("index"))
@@ -72,10 +57,8 @@ def delete_book(book_id):
 @app.route("/rate_book/<book_id>", methods=["GET", "POST"])
 def rate_book(book_id):
 
-    book = mongo.db.Books.find_one({"_id": ObjectId(book_id)})
-    book['ratings'].append(int(request.form.get("addRating")))
-    mongo.db.Books.update_one({"_id": ObjectId(book_id)},
-                              {"$set": book})
+    rating = int(request.form.get("addRating"))
+    add_book_rating(book_id, rating)
 
     # GET Method
     return redirect(url_for("index"))
@@ -83,6 +66,7 @@ def rate_book(book_id):
 
 # Run the Flask Application
 if __name__ == "__main__":
+
     app.run(host="0.0.0.0",
             port="5000",
             debug=True)

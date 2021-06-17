@@ -18,15 +18,15 @@ mongo.init_app(app)
 
 
 # Do not recommend this for production
-from example_functions import (insert_one_book, delete_one_book,
-                               calculate_average, add_book_rating,
-                               obtain_all_books)
+from example_classes import Book
+
+# (insert_one_book, delete_one_book, calculate_average, add_book_rating, obtain_all_books)
 
 
 # Flask Route for home
 @app.route("/")
 def index():
-    books = calculate_average(obtain_all_books())
+    books = Book.obtain_all_books()
     return render_template("index.html", books=books)
 
 
@@ -36,7 +36,10 @@ def add_book():
 
     # POST Method
     if request.method == "POST":
-        insert_one_book(request.form)
+        new_book = Book(**request.form)
+
+        print(new_book.title)
+        new_book.insert_into_database()
         return redirect(url_for("index"))
 
     # GET Method
@@ -47,7 +50,7 @@ def add_book():
 @app.route("/delete_book/<book_id>")
 def delete_book(book_id):
 
-    delete_one_book(book_id)
+    Book.delete_one_book(book_id)
 
     # GET Method
     return redirect(url_for("index"))
@@ -57,10 +60,11 @@ def delete_book(book_id):
 @app.route("/rate_book/<book_id>", methods=["GET", "POST"])
 def rate_book(book_id):
 
-    rating = int(request.form.get("addRating"))
-    add_book_rating(book_id, rating)
+    if request.method == "POST":
 
-    # GET Method
+        existing_book = Book.obtain_one_book(book_id)
+        existing_book.add_book_rating(int(request.form.get("addRating")))
+
     return redirect(url_for("index"))
 
 
