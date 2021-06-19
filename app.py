@@ -16,16 +16,15 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo()
 mongo.init_app(app)
 
-
 # Do not recommend this for production
 from example_classes import Book
-
-# (insert_one_book, delete_one_book, calculate_average, add_book_rating, obtain_all_books)
 
 
 # Flask Route for home
 @app.route("/")
 def index():
+
+    # Obtain all books
     books = Book.obtain_all_books()
     return render_template("index.html", books=books)
 
@@ -36,10 +35,12 @@ def add_book():
 
     # POST Method
     if request.method == "POST":
-        new_book = Book(**request.form)
 
-        print(new_book.title)
+        # Create a instnace of book using form
+        new_book = Book(**request.form)
+        # Insert into DB
         new_book.insert_into_database()
+
         return redirect(url_for("index"))
 
     # GET Method
@@ -50,7 +51,10 @@ def add_book():
 @app.route("/delete_book/<book_id>")
 def delete_book(book_id):
 
-    Book.delete_one_book(book_id)
+    if request.method == "POST":
+
+        # Call static function to delete book
+        Book.delete_one_book(book_id)
 
     # GET Method
     return redirect(url_for("index"))
@@ -62,9 +66,12 @@ def rate_book(book_id):
 
     if request.method == "POST":
 
+        # Create an instance of a book using existing book id
         existing_book = Book.obtain_one_book(book_id)
+        # Update the book rating
         existing_book.add_book_rating(int(request.form.get("addRating")))
 
+    # GET method
     return redirect(url_for("index"))
 
 
