@@ -22,10 +22,10 @@ mongo.init_app(app)
 @app.route("/")
 def index():
 
-    # books = mongo.db.Books.find()
-
+    # Obtain all books from DB
     books = list(mongo.db.Books.find())
 
+    # Loop through all books and average the ratings
     for i in range(len(books)):
         books[i]['ratings'] = round(sum(books[i]['ratings']) / len(books[i]['ratings']), 2)
 
@@ -39,6 +39,7 @@ def add_book():
     # POST Method
     if request.method == "POST":
 
+        # Create a dictionary from form fields
         new_book = {
             "title": request.form.get('title'),
             "author": request.form.get('author'),
@@ -47,6 +48,7 @@ def add_book():
             "ratings": [int(request.form.get('firstRating'))]
         }
 
+        # Insert the book into the DB
         try:
             mongo.db.Books.insert_one(new_book)
         except Exception as e:
@@ -62,6 +64,7 @@ def add_book():
 @app.route("/delete_book/<book_id>")
 def delete_book(book_id):
 
+    # Delete a book from the DB using the requested bookID
     mongo.db.Books.delete_one({"_id": ObjectId(book_id)})
 
     # GET Method
@@ -72,10 +75,17 @@ def delete_book(book_id):
 @app.route("/rate_book/<book_id>", methods=["GET", "POST"])
 def rate_book(book_id):
 
-    book = mongo.db.Books.find_one({"_id": ObjectId(book_id)})
-    book['ratings'].append(int(request.form.get("addRating")))
-    mongo.db.Books.update_one({"_id": ObjectId(book_id)},
-                              {"$set": book})
+    if request.method == "POST":
+
+        # Obtain the requested book from the DB
+        book = mongo.db.Books.find_one({"_id": ObjectId(book_id)})
+
+        # Append the new rating to the ratings list
+        book['ratings'].append(int(request.form.get("addRating")))
+
+        # Update the book entry in the DB
+        mongo.db.Books.update_one({"_id": ObjectId(book_id)},
+                                {"$set": book})
 
     # GET Method
     return redirect(url_for("index"))
