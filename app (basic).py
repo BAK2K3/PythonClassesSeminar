@@ -43,9 +43,9 @@ def add_book():
         new_book = {
             "title": request.form.get('title'),
             "author": request.form.get('author'),
-            "release": request.form.get('date'),
-            "image_URL": request.form.get('urlInput'),
-            "ratings": [int(request.form.get('firstRating'))]
+            "release": request.form.get('release'),
+            "image_URL": request.form.get('image_URL'),
+            "ratings": [int(request.form.get('ratings'))]
         }
 
         # Insert the book into the DB
