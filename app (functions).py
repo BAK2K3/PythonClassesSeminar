@@ -26,6 +26,8 @@ from example_functions import (insert_one_book, delete_one_book,
 # Flask Route for home
 @app.route("/")
 def index():
+
+    # Obtain books from the DB and calculate average
     books = calculate_average(obtain_all_books())
     return render_template("index.html", books=books)
 
@@ -36,6 +38,8 @@ def add_book():
 
     # POST Method
     if request.method == "POST":
+
+        # Insert book into DB using the form
         insert_one_book(request.form)
         return redirect(url_for("index"))
 
@@ -47,6 +51,7 @@ def add_book():
 @app.route("/delete_book/<book_id>")
 def delete_book(book_id):
 
+    # Delete book from DB using book_ID
     delete_one_book(book_id)
 
     # GET Method
@@ -57,8 +62,12 @@ def delete_book(book_id):
 @app.route("/rate_book/<book_id>", methods=["GET", "POST"])
 def rate_book(book_id):
 
-    rating = int(request.form.get("addRating"))
-    add_book_rating(book_id, rating)
+    if request.method == "POST":
+
+        # Assign rating variable from form
+        rating = int(request.form.get("addRating"))
+        # Add rating
+        add_book_rating(book_id, rating)
 
     # GET Method
     return redirect(url_for("index"))
