@@ -38,6 +38,15 @@ def add_book():
 
         # Create a instnace of book using form
         new_book = Book(**request.form)
+
+        # Create an instance of new book
+        new_book = Book(title=request.form.get('title'),
+                        author=request.form.get('author'),
+                        release=request.form.get('release'),
+                        image_URL=request.form.get('image_URL'),
+                        ratings=[int(request.form.get('ratings'))])
+
+
         # Insert into DB
         new_book.insert_into_database()
 

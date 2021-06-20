@@ -85,7 +85,7 @@ def rate_book(book_id):
 
         # Update the book entry in the DB
         mongo.db.Books.update_one({"_id": ObjectId(book_id)},
-                                {"$set": book})
+                                  {"$set": book})
 
     # GET Method
     return redirect(url_for("index"))

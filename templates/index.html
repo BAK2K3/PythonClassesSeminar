@@ -8,7 +8,6 @@
             <div class="col-3">
                 <img src="{{ book.image_URL }}" class="img-fluid" alt="{{ book.Title }}">
             </div>
-
             <div class="col-9">
                 <p><strong>Title: </strong>{{ book.title }}</p>
                 <p><strong>Author: </strong>{{ book.author }}</p>
@@ -22,9 +21,7 @@
                     <button type="submit" class="btn btn-primary">Rate</button>
                     <a href="{{ url_for('delete_book', book_id=book._id) }}" class="btn btn-danger">Delete</a>
                 </form>
-                
             </div>
-
         </div>
     </div>
     <hr>

@@ -13,9 +13,9 @@ def insert_one_book(book_form):
         new_book = {
                     "title": book_form.get('title'),
                     "author": book_form.get('author'),
-                    "release": book_form.get('date'),
-                    "image_URL": book_form.get('urlInput'),
-                    "ratings": [int(book_form.get('firstRating'))]
+                    "release": book_form.get('release'),
+                    "image_URL": book_form.get('image_URL'),
+                    "ratings": [int(book_form.get('ratings'))]
                 }
         mongo.db.Books.insert_one(new_book)
         return True
