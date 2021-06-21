@@ -28,7 +28,19 @@ These folders hold the neccessary HTML and CSS required for Flask and Python to 
 
 ### How to Run
 
-In order to test this code, please run `pip install -r requirements.txt`, then `python app.py`.
+In order to test this code, please run `pip install -r requirements.txt`.
+
+You will need the following environment variables:
+
+```
+"SECRET_KEY"
+"MONGO_URI"
+"MONGO_DBNAME"
+```
+
+Run the program with `python app.py`.
+
+**Note:**
 
 Whichever method of implementation you would like to test (basic, functions, or classes), replace the `app.py` file with the chosen file. For example, change `app.py` to `app_classes.py` and rename `app_function.py` to `app.py` if you would like to test the flask application using the functions implemented throughout the serminar.
 
