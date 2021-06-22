@@ -60,10 +60,8 @@ def add_book():
 @app.route("/delete_book/<book_id>")
 def delete_book(book_id):
 
-    if request.method == "POST":
-
-        # Call static function to delete book
-        Book.delete_one_book(book_id)
+    # Call static function to delete book
+    Book.delete_one_book(book_id)
 
     # GET Method
     return redirect(url_for("index"))
